@@ -12,6 +12,13 @@ TEST(SwapTests, SimpleSwapTwoValues) {
     /*
      * Swap two values and see if the swap was successful.
      */
+    int x = 12;
+    int y = 13;
+
+    swap(&x, &y);
+
+    EXPECT_EQ(x, 13);
+    EXPECT_EQ(y, 12);
 }
 
 TEST(SwapTests, SimpleSwapValuesInArray) {
@@ -20,6 +27,13 @@ TEST(SwapTests, SimpleSwapValuesInArray) {
      * Check that the ones that swapped did swap and the ones that didn't swap
      * are still at the same locations
      */
+    int arr[] = {10, 20, 30, 40};
+    swap(&arr[1], &arr[3]);
+    EXPECT_EQ(arr[0], 10);
+    EXPECT_EQ(arr[1], 40);
+    EXPECT_EQ(arr[2], 30);
+    EXPECT_EQ(arr[3], 20);
+
 }
 
 RC_GTEST_PROP(SwapTests,
@@ -29,6 +43,8 @@ RC_GTEST_PROP(SwapTests,
     /*
      * Swap two values and see if the swap was successful.
      */
+    (void)a_start;
+    (void)b_start;
 }
 
 
@@ -39,4 +55,5 @@ RC_GTEST_PROP(SwapTests,
     /*
      * Swap two values in an array. See that they swapped and the others did not
      */
+    (void)values;
 }

@@ -33,7 +33,7 @@ void parse_args(int argc, char** argv, int* ar_out, int* len_out){
   *len_out = argc - 1;
   ar_out = (int*)malloc(*len_out);
   for(int i = 0; i < *len_out; ++i){
-    sscanf(argv[i], "%d", ar_out[i]);
+    sscanf(argv[i], "%d", &ar_out[i]);
   }
 
 }

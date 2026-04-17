@@ -14,6 +14,8 @@ auto word_generator() {
 auto vector_of_ints_to_vector_of_strings(const std::vector<int>& numbers) {
     /* Create a vector of strings from a vector of ints
      */
+    (void)numbers;
+    return std::vector<std::string>{};
 }
 
 
