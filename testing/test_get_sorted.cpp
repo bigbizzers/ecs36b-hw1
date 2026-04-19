@@ -110,7 +110,16 @@ RC_GTEST_PROP(GetSortedTests,
     /* Check that after sorting an array, the values are in ascending order
      * Don't forget to free any memory that was dynamically allocated as part of this test
      */
-(void)values;
+    int* arr = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, arr);
+
+    int* sorted = get_sorted(arr, values.size());
+
+    for (size_t i = 0; i + 1 < values.size(); i++ ) {
+        RC_ASSERT(sorted[i] <= sorted[i+1]);
+    }
+    free(arr);
+    free(sorted);
 }
 
 RC_GTEST_PROP(GetSortedTests,
@@ -121,7 +130,20 @@ RC_GTEST_PROP(GetSortedTests,
      * Check that the original array was not modified.
      * Don't forget to free any memory that was dynamically allocated as part of your test.
      */
-    (void)values;
+    int* arr = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, arr);
+
+    int* original_arr = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, original_arr);
+
+    int* sorted = get_sorted(arr, values.size());
+
+    for (size_t i = 0; i < values.size(); ++i) {
+        RC_ASSERT(arr[i] == original_arr[i]);
+    }
+    free(arr);
+    free(original_arr);
+    free(sorted);
 }
 
 RC_GTEST_PROP(GetSortedTests,
@@ -133,7 +155,17 @@ RC_GTEST_PROP(GetSortedTests,
      * (ar and copy point to different locations in memory and no parts of the two arrays overlap)
      * Don't forget to free any memory that was dynamically allocated as part of your test.
      */
-    (void)values;
+
+
+        int* arr = (int*)malloc(sizeof(int) * values.size());
+        copy_vector_to_array(values, arr);
+
+        int* sorted = get_sorted(arr, values.size());
+
+        RC_ASSERT(sorted != arr);
+
+        free(arr);
+        free(sorted);
 }
 
 

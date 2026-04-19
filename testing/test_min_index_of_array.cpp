@@ -4,6 +4,7 @@
 #include "gmock/gmock.h"
 #include "rapidcheck/gtest.h"
 #include "sorting.h"
+#include "test_helpers.h"
 
 TEST(MinIndexOfArrayTests, SimpleMinIndexAtFrontOfArray) {
     /*
@@ -67,16 +68,46 @@ TEST(MinIndexOfArrayTests, SimpleArrayDoesNotChange) {
 
 RC_GTEST_PROP(MinIndexOfArrayTests,
               PropertyFindMinIndex,
-              ()) {
+              (const std::vector<int>& values)) {
     /* Check that the value at the location of the minimum index
      * is not larger than any of the other values in the array
      */
+    RC_PRE(values.size() > 0u);
+
+    int* arr = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, arr);
+
+    int min_i = min_index_of_array(arr, values.size());
+
+    RC_ASSERT(min_i >= 0);
+    RC_ASSERT((size_t)min_i < values.size());
+
+    for (size_t i = 0; i < values.size(); ++i) {
+        RC_ASSERT(arr[min_i] <= arr[i]);
+    }
+    free(arr);
 }
 
 RC_GTEST_PROP(MinIndexOfArrayTests,
               PropertyArrayDoesNotChange,
-              ()) {
+              (const std::vector<int>& values)) {
+
     /*
      * Check that finding the minimum of the array did not change the contents of the array.
      */
+    RC_PRE(values.size() > 0u);
+
+    int* arr = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, arr);
+
+    int* original = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, original);
+
+    min_index_of_array(arr, values.size());
+
+    for (size_t i = 0; i < values.size(); ++i) {
+        RC_ASSERT(arr[i] == original[i]);
+    }
+    free(arr);
+    free(original);
 }

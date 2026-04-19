@@ -63,7 +63,18 @@ RC_GTEST_PROP(CopyArrayTests,
      * Check that the values in the copy are the same as the values in the original array.
      * Don't forget to free any memory that was dynamically allocated as part of your test.
      */
-    (void)values;
+    RC_PRE(values.size() > 0u);
+
+    int* arr = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, arr);
+
+    int* copy = copy_array(arr, values.size());
+
+    for (size_t i = 0; i < values.size(); ++i) {
+        RC_ASSERT(copy[i] == arr[i]);
+    }
+    free(arr);
+    free(copy);
 }
 
 RC_GTEST_PROP(CopyArrayTests,
@@ -74,7 +85,24 @@ RC_GTEST_PROP(CopyArrayTests,
      * Check that the  values in the original array did not change.
      * Don't forget to free any memory that was dynamically allocated as part of your test.
      */
-    (void)values;
+    RC_PRE(values.size() > 0u);
+
+    int* arr = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, arr);
+
+    int* original = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, original);
+
+    int* copy = copy_array(arr, values.size());
+
+    for (size_t i = 0; i < values.size(); ++i) {
+        RC_ASSERT(arr[i] == original[i]);
+    }
+    free(arr);
+    free(original);
+    free(copy);
+
+
 }
 
 RC_GTEST_PROP(CopyArrayTests,
@@ -86,7 +114,17 @@ RC_GTEST_PROP(CopyArrayTests,
   * (ar and copy point to different locations in memory and no parts of the two arrays overlap)
   * Don't forget to free any memory that was dynamically allocated as part of your test.
   */
-    (void)values;
+    RC_PRE(values.size() > 0u);
+
+    int* arr = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, arr);
+
+    int* copy = copy_array(arr, values.size());
+
+    RC_ASSERT(copy != arr);
+
+    free(arr);
+    free(copy);
 }
 
 

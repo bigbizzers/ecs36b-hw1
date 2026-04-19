@@ -43,8 +43,13 @@ RC_GTEST_PROP(SwapTests,
     /*
      * Swap two values and see if the swap was successful.
      */
-    (void)a_start;
-    (void)b_start;
+    int a = a_start;
+    int b = b_start;
+
+    swap(&a, &b);
+
+    RC_ASSERT(a == b_start);
+    RC_ASSERT(b == a_start);
 }
 
 
@@ -55,5 +60,22 @@ RC_GTEST_PROP(SwapTests,
     /*
      * Swap two values in an array. See that they swapped and the others did not
      */
-    (void)values;
+    RC_PRE(values.size() >= 2u);
+
+    int* arr = (int*)malloc(sizeof(int) * values.size());
+    copy_vector_to_array(values, arr);
+
+    int first_original = arr[0];
+    int last_original = arr[values.size() - 1];
+
+    swap(&arr[0], &arr[values.size() - 1]);
+
+    RC_ASSERT(arr[0] == last_original);
+    RC_ASSERT(arr[values.size() - 1] == first_original);
+
+    for (size_t i = 1; i + 1 < values.size(); ++i) {
+        RC_ASSERT(arr[i] == values[i]);
+    }
+
+    free(arr);
 }
